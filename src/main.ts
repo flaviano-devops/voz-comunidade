@@ -1,4 +1,5 @@
 import "./styles.css";
+import { isSupabaseConfigured } from "./lib/supabase";
 
 type ViewName = "feed" | "chat" | "profile" | "saved";
 type FeedFilter = "all" | "featured" | "following" | "new";
@@ -105,7 +106,7 @@ app.innerHTML = `
         <span class="pulse"></span>
         <div>
           <strong>1 comunidade</strong>
-          <small>Sem divisao por temas ainda</small>
+          <small>${isSupabaseConfigured ? "Supabase conectado" : "Dados locais por enquanto"}</small>
         </div>
       </div>
     </aside>
