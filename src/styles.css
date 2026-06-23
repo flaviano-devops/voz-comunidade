@@ -217,6 +217,60 @@ button {
   margin: 0 auto;
 }
 
+.welcome-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px;
+  margin-bottom: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.welcome-panel h1 {
+  margin: 5px 0 6px;
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.welcome-panel p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.score-card {
+  flex: 0 0 136px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  min-height: 108px;
+  padding: 14px;
+  border-radius: 8px;
+  color: white;
+  background: linear-gradient(135deg, var(--accent), var(--accent-3));
+}
+
+.score-card strong {
+  display: block;
+  font-size: 32px;
+}
+
+.score-card span {
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .view {
   display: none;
 }
@@ -273,6 +327,22 @@ button {
   background: #2f756f;
 }
 
+.member-0 {
+  background: #8f4a9e;
+}
+
+.member-1 {
+  background: #c06b21;
+}
+
+.member-2 {
+  background: #2f756f;
+}
+
+.member-3 {
+  background: #244c9c;
+}
+
 .composer-body {
   flex: 1;
   min-width: 0;
@@ -311,7 +381,8 @@ button {
 }
 
 .tag-row button,
-.chip {
+.chip,
+.mood {
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--surface);
@@ -319,6 +390,32 @@ button {
   padding: 8px 12px;
   font-weight: 700;
   font-size: 13px;
+}
+
+.mood-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.mood.active,
+.mood:hover {
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--accent-2) 50%, var(--line));
+  background: color-mix(in srgb, var(--accent-2) 10%, var(--surface));
+}
+
+.publish-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.publish-group span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .filter-bar {
@@ -358,6 +455,10 @@ button {
   gap: 12px;
 }
 
+.post-head .mood-pill {
+  margin-left: auto;
+}
+
 .post-meta {
   min-width: 0;
 }
@@ -376,6 +477,16 @@ button {
 
 .post p {
   line-height: 1.55;
+}
+
+.mood-pill {
+  flex: 0 0 auto;
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: var(--accent-3);
+  background: color-mix(in srgb, var(--accent-3) 10%, var(--surface));
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .post-image {
@@ -423,6 +534,69 @@ button {
   background: var(--surface-2);
 }
 
+.comments-panel {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+
+.comment-list {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.comment {
+  display: grid;
+  gap: 2px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.comment strong {
+  font-size: 13px;
+}
+
+.comment span,
+.muted {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.comment-form {
+  display: flex;
+  gap: 8px;
+}
+
+.comment-form input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.comment-form button {
+  border: 0;
+  border-radius: 8px;
+  padding: 0 12px;
+  color: white;
+  background: var(--accent);
+  font-weight: 800;
+}
+
+.empty-card {
+  padding: 18px;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
 .right-rail {
   display: grid;
   gap: 16px;
@@ -462,6 +636,23 @@ button {
   margin: 0;
   color: var(--muted);
   line-height: 1.5;
+}
+
+.mission-list {
+  display: grid;
+  gap: 10px;
+}
+
+.mission-list label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.mission-list input {
+  accent-color: var(--accent);
 }
 
 .chat-column,
@@ -523,6 +714,11 @@ button {
 .bubble strong {
   display: block;
   font-size: 13px;
+}
+
+.bubble small {
+  color: var(--muted);
+  font-weight: 600;
 }
 
 .bubble p {
@@ -613,6 +809,28 @@ button {
   border-radius: 8px;
 }
 
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 20;
+  max-width: min(360px, calc(100vw - 32px));
+  padding: 12px 14px;
+  border-radius: 8px;
+  color: white;
+  background: var(--ink);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (max-width: 980px) {
   .app-shell {
     grid-template-columns: 76px minmax(0, 1fr);
@@ -695,9 +913,16 @@ button {
   }
 
   .composer-actions,
-  .chat-form {
+  .chat-form,
+  .comment-form,
+  .welcome-panel {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .score-card {
+    width: 100%;
+    min-height: 82px;
   }
 
   .panel-title {
