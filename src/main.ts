@@ -251,25 +251,70 @@ app.innerHTML = `
         </section>
 
         <section class="profile-column view" id="profileView">
-          <div class="profile-hero">
-            <div class="avatar profile-avatar" id="profileAvatar">F</div>
-            <div>
+          <div class="amino-profile">
+            <section class="profile-cover">
+              <div class="profile-cover-nav">
+                <button class="profile-icon" data-view="feed" aria-label="Voltar ao feed">&lt;</button>
+                <div class="profile-presence"><span></span>Online</div>
+                <button class="profile-icon" aria-label="Mais opcoes">...</button>
+              </div>
+
+              <div class="profile-avatar-wrap">
+                <div class="profile-avatar-ring">
+                  <div class="avatar profile-avatar" id="profileAvatar">F</div>
+                </div>
+                <span class="thought-badge">hi</span>
+              </div>
+
               <h1 id="profileName">Flaviano</h1>
               <p id="profileHandle">@fundador - membro beta</p>
+
+              <div class="profile-mini-row">
+                <span id="profileLevel">Lv17</span>
+                <strong>Comunidade Universal</strong>
+              </div>
+
+              <button class="profile-edit-button" id="profileEditJump" type="button">Editar perfil</button>
+
+              <div class="profile-reward-row">
+                <div class="streak-pill"><span>927</span> day streak</div>
+                <div class="coin-pill"><span id="profileCoins">0</span> pontos</div>
+              </div>
+            </section>
+
+            <div class="profile-stat-strip">
+              <div><strong id="profileReputation">0</strong><span>Reputacao</span></div>
+              <div><strong id="profileFollowing">37</strong><span>Seguindo</span></div>
+              <div><strong id="profileFollowers">0</strong><span>Seguidores</span></div>
+              <div><strong id="profileVisitors">0</strong><span>Visitantes</span></div>
             </div>
+
+            <section class="profile-bio-card">
+              <div class="bio-heading">
+                <h2>Bio</h2>
+                <span id="profileSince">Membro desde 2026</span>
+              </div>
+              <div class="bio-preview">
+                <div class="bio-thumb"></div>
+                <p id="profileBioText">Construindo uma comunidade universal.</p>
+                <span aria-hidden="true">&gt;</span>
+              </div>
+            </section>
+
+            <nav class="profile-tabs" aria-label="Conteudo do perfil">
+              <button class="active">Posts <span id="profilePostCount">0</span></button>
+              <button>Wall <span id="profileWallCount">0</span></button>
+              <button>Saved Posts <span id="profileSavedCount">0</span></button>
+            </nav>
+
+            <form class="settings-panel profile-editor-panel" id="profileForm">
+              <h2>Identidade</h2>
+              <label>Nome exibido<input id="displayNameInput" maxlength="28" /></label>
+              <label>Usuario<input id="handleInput" maxlength="24" /></label>
+              <label>Bio<textarea id="bioInput" maxlength="140"></textarea></label>
+              <button class="primary-btn" type="submit">Salvar perfil</button>
+            </form>
           </div>
-          <div class="stats-grid">
-            <div><strong id="profilePostCount">0</strong><span>posts</span></div>
-            <div><strong id="profileLikeCount">0</strong><span>curtidas</span></div>
-            <div><strong id="profileSavedCount">0</strong><span>salvos</span></div>
-          </div>
-          <form class="settings-panel" id="profileForm">
-            <h2>Identidade</h2>
-            <label>Nome exibido<input id="displayNameInput" maxlength="28" /></label>
-            <label>Usuario<input id="handleInput" maxlength="24" /></label>
-            <label>Bio<textarea id="bioInput" maxlength="140"></textarea></label>
-            <button class="primary-btn" type="submit">Salvar perfil</button>
-          </form>
         </section>
 
         <section class="saved-column view" id="savedView">
@@ -582,14 +627,22 @@ function renderMembers(): void {
 function renderProfile(): void {
   const ownPosts = state.posts.filter((post) => post.handle === state.profile.handle);
   const receivedLikes = ownPosts.reduce((total, post) => total + post.likes + (state.likedIds.includes(post.id) ? 1 : 0), 0);
+  const reputation = Math.max(9600, ownPosts.length * 120 + receivedLikes * 18 + state.chat.length * 8);
+  const followers = Math.max(115, state.posts.length * 9 + state.savedIds.length * 4);
+  const visitors = Math.max(1096, state.chat.length * 43 + state.posts.length * 17);
 
   getElement<HTMLDivElement>("#composerAvatar").textContent = state.profile.avatar;
   getElement<HTMLDivElement>("#profileAvatar").textContent = state.profile.avatar;
   getElement<HTMLHeadingElement>("#profileName").textContent = state.profile.displayName;
   getElement<HTMLParagraphElement>("#profileHandle").textContent = `${state.profile.handle} - membro beta`;
   getElement<HTMLElement>("#profilePostCount").textContent = String(ownPosts.length);
-  getElement<HTMLElement>("#profileLikeCount").textContent = String(receivedLikes);
+  getElement<HTMLElement>("#profileWallCount").textContent = String(state.chat.length);
   getElement<HTMLElement>("#profileSavedCount").textContent = String(state.savedIds.length);
+  getElement<HTMLElement>("#profileReputation").textContent = compactNumber(reputation);
+  getElement<HTMLElement>("#profileFollowers").textContent = compactNumber(followers);
+  getElement<HTMLElement>("#profileVisitors").textContent = compactNumber(visitors);
+  getElement<HTMLElement>("#profileCoins").textContent = compactNumber(receivedLikes + state.savedIds.length * 25 + 6446);
+  getElement<HTMLElement>("#profileBioText").textContent = state.profile.bio || "Sem bio ainda.";
   displayNameInput.value = state.profile.displayName;
   handleInput.value = state.profile.handle;
   bioInput.value = state.profile.bio;
@@ -680,6 +733,12 @@ function timeAgo(date: string): string {
   return `${Math.round(hours / 24)}d`;
 }
 
+function compactNumber(value: number): string {
+  if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+  if (value >= 1000) return `${(value / 1000).toFixed(value >= 10000 ? 0 : 1)}K`;
+  return String(value);
+}
+
 function uniqueBy<T>(items: T[], getKey: (item: T) => string): T[] {
   const seen = new Set<string>();
   return items.filter((item) => {
@@ -699,6 +758,14 @@ document.querySelectorAll<HTMLButtonElement>(".nav-item").forEach((item) => {
     document.querySelectorAll(".view").forEach((view) => view.classList.remove("active"));
     item.classList.add("active");
     getElement(`#${viewName}View`).classList.add("active");
+  });
+});
+
+document.querySelectorAll<HTMLButtonElement>(".profile-icon[data-view]").forEach((item) => {
+  item.addEventListener("click", () => {
+    const viewName = item.dataset.view;
+    if (!viewName) return;
+    getElement<HTMLButtonElement>(`.nav-item[data-view="${viewName}"]`).click();
   });
 });
 
@@ -743,6 +810,11 @@ getElement<HTMLButtonElement>("#publishPost").addEventListener("click", publishP
 getElement<HTMLButtonElement>("#focusComposer").addEventListener("click", () => {
   getElement<HTMLButtonElement>('[data-view="feed"]').click();
   postText.focus();
+});
+
+getElement<HTMLButtonElement>("#profileEditJump").addEventListener("click", () => {
+  displayNameInput.focus();
+  getElement<HTMLElement>(".profile-editor-panel").scrollIntoView({ behavior: "smooth", block: "center" });
 });
 
 getElement<HTMLButtonElement>("#themeToggle").addEventListener("click", () => {
